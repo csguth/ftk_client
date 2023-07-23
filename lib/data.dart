@@ -17,6 +17,6 @@ class Database {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
+    //await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
   }
 }
