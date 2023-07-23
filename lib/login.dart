@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
-
-// Define a custom Form widget.
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final Function(String, String) onSubmitted;
+  const Login({super.key, required this.onSubmitted});
 
   @override
   State<Login> createState() => _LoginState();
 }
-
-// Define a corresponding State class.
-// This class holds data related to the Form.
 class _LoginState extends State<Login> {
   final _login = TextEditingController();
   final _password = TextEditingController();
@@ -22,17 +17,8 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  _onLogin() {
-
-    if (_login.text == "csguth" && _password.text == "123456789") {
-      User().username = "csguth";
-    } else if (_login.text == "ligiavieceli" && _password.text == "123456789") {
-      User().username = "ligiavieceli";
-    } else {
-      return;
-    }
-    Navigator.pushNamed(context, '/home');
-
+  _onLogin() async{
+    widget.onSubmitted(_login.text, _password.text);
   }
 
   @override

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final Function() onSignedOut;
+  const Home({super.key, required this.onSignedOut});
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,22 +16,18 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _username = User().username;    
-  }
-
-  void _handleLogout() {
-      User().username = "";
-      setState(() {
-        _username = User().username;
-      });
-      
-      Navigator.popUntil(context, ModalRoute.withName('/login'));
-
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    _username = firebaseAuth.currentUser?.displayName ?? "";
+    firebaseAuth.userChanges().listen((event) {
+      if (event == null || event.isAnonymous)
+      {
+        widget.onSignedOut();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Hello, $_username"),
@@ -42,7 +38,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children:  <Widget>[
           ElevatedButton(
-            onPressed: _handleLogout,
+            onPressed: widget.onSignedOut,
             child: const Text("Sign out"),
           ),
         ],

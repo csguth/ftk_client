@@ -1,29 +1,94 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'data.dart';
 import 'home.dart';
-import 'landing.dart';
 import 'login.dart';
-import 'user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await User().init();
+  await Database().init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  bool _isSignedIn() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    return (currentUser != null && !currentUser.isAnonymous);
+  }
 
-  // This widget is the root of your application.
+  signin(String username, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: username, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  signout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+
+  Widget routeLogin(BuildContext context) {
+    final navigator = Navigator.of(context);
+    return Login(onSubmitted: (String username, String password) async {
+      await signin(username, password);
+      if (_isSignedIn()) {
+        navigator.pushNamed(Navigator.defaultRouteName);
+      }
+    });
+  }
+
+  Widget routeHome(BuildContext context) {
+    final navigator = Navigator.of(context);
+    return Home(
+      onSignedOut: () async {
+        signout();
+
+        const newRouteName = "/login";
+        bool isNewRouteSameAsCurrent = false;
+
+        if (navigator.canPop()) {
+          navigator.popUntil((route) {
+            if (route.settings.name == newRouteName) {
+              isNewRouteSameAsCurrent = true;
+              return true;
+            }
+            return false;
+          });
+
+        }
+        
+        if (!isNewRouteSameAsCurrent) {
+          navigator.pushNamed(newRouteName);
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       initialRoute: '/',
       routes: {
-        '/': (context) => const Landing(),
-        '/login': (context) => const Login(),
-        '/home': (context) => const Home(),
+        '/': routeHome,
+        '/login': routeLogin,
       },
       theme: ThemeData(
         // This is the theme of your application.
@@ -47,4 +112,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

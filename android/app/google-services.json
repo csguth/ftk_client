@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "394583557535",
+    "project_id": "ftk-firebase",
+    "storage_bucket": "ftk-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394583557535:android:977a79e2d482f7ea8a69aa",
+        "android_client_info": {
+          "package_name": "gatosanonimos.ftk_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394583557535-qgcm26h127t02d32d6p7epf72mdbod2u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwYKyv6veUIJFXgvbK0w7Jk60mJ2svLXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394583557535-qgcm26h127t02d32d6p7epf72mdbod2u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
