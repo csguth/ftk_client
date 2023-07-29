@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class Login extends StatefulWidget {
   final Function(String, String) onSubmitted;
   const Login({super.key, required this.onSubmitted});
@@ -6,6 +7,7 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
+
 class _LoginState extends State<Login> {
   final _login = TextEditingController();
   final _password = TextEditingController();
@@ -17,7 +19,7 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-  _onLogin() async{
+  _onLogin() async {
     widget.onSubmitted(_login.text, _password.text);
   }
 
@@ -26,26 +28,23 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          TextFormField(
-            controller: _login,
-            onFieldSubmitted: (x) => {
-              _onLogin()
-          }),
-          TextFormField(
-            controller: _password,
-            obscureText: true,
-            onFieldSubmitted: (x) => {
-              _onLogin()
-          }),
-          ElevatedButton(
-            onPressed: _onLogin,
-            child: const Text("Sign in"),
-          )
-        ]),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text("Sign in"),
+              TextFormField(
+                  controller: _login, onFieldSubmitted: (x) => {_onLogin()}),
+              TextFormField(
+                  controller: _password,
+                  obscureText: true,
+                  onFieldSubmitted: (x) => {_onLogin()}),
+              ElevatedButton(
+                onPressed: _onLogin,
+                child: const Text("Sign in"),
+              )
+            ]),
       ),
     );
   }
 }
-
-
